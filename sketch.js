@@ -36,7 +36,7 @@ function SnakeHead(){
     
     this.move = function(direction){
         this.prev_x = this.x;
-        this.prev_y = this.x;
+        this.prev_y = this.y;
         this.x += direction[0] * Tile_Dimension;
         this.y += direction[1] * Tile_Dimension;
         
@@ -59,7 +59,15 @@ function SnakeHead(){
     }
     
     this.eat = function(food_list){
-        
+        if (food_list.length > 0){
+            for (i = 0; i < food_list.length; i++){
+                if (this.x == food_list[i].x && this.y == food_list[i].y){
+                    this.tail.push(new SnakeBody(this.prev_x, this.prev_y));
+                    food_list[i] = new Food();
+                    
+                }
+            }
+        }
         
     }
     
@@ -96,10 +104,12 @@ function Food(){
 function draw() {
     background(0, 0, 0);
     fill(255,0,0);
+    snake.eat(food_list)
     food_list[0].show();
     
+    snake.move(direction);    
     snake.show();
-    snake.move(direction);
+
 }
 
 // User input
