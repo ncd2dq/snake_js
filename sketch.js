@@ -8,12 +8,14 @@ let direction = [1, 0];
 let score = 0;
 let score_size = 32;
 let score_y_offset = 50;
+var song;
 
 function setup() {    
     createCanvas(Canvas_x, Canvas_y);
     frameRate(FPS);
     food_list = [new Food()];
     snake = new SnakeHead()
+    song = loadSound("snake_music.mp3");
 }
 
 
@@ -140,7 +142,9 @@ function draw() {
     textSize(score_size);
     fill(0, 102, 153);
     text(score, Canvas_x / 2 - score_size, score_y_offset);
-    console.log(score)
+    if( song.isPlaying() == false){
+        song.play();
+    }
 }
 
 // User input
