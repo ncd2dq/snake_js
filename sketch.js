@@ -18,8 +18,10 @@ function preload(){
 function setup() {    
     createCanvas(Canvas_x, Canvas_y);
     frameRate(FPS);
+    
     food_list = [new Food()];
-    snake = new SnakeHead()
+    snake = new SnakeHead();
+    
     if(song.isLoaded() == true){
         song.play();
     }
@@ -37,9 +39,11 @@ function SnakeHead(){
     this.tail = []
     
     this.show = function(){
+        // Draws the head of the snake
         color(0, 255, 0);
         rect(this.x, this.y, Tile_Dimension, Tile_Dimension);
         
+        // Draws the body pieces of the snake
         if (this.tail.length != 0){
             for (i = 0; i < this.tail.length; i++){
                 this.tail[i].show()
@@ -48,6 +52,8 @@ function SnakeHead(){
     }
     
     this.move = function(direction){
+        // First, store current location as previous, so that can be used to
+        // move snake body pieces, then update current position
         this.prev_x = this.x;
         this.prev_y = this.y;
         this.x += direction[0] * Tile_Dimension;
@@ -73,15 +79,18 @@ function SnakeHead(){
             this.y = Canvas_y - Tile_Dimension;
         }
         
-        // this handles the trailing affect of the snake tail
+        // This handles the trailing affect of the snake tail
         if (this.tail.length != 0){
             for (i = 0; i < this.tail.length; i++){
+                // For the first tail piece, take the prev_location from the SnakeHead
                 if (i == 0){
                     this.tail[i].prev_x = this.tail[i].x;
                     this.tail[i].prev_y = this.tail[i].y;
                     this.tail[i].x = this.prev_x;
                     this.tail[i].y = this.prev_y;
                 } else {
+                    // For the other tail pieces, take the prev_location from tail pieces
+                    // that appear earlier in the tail array
                     this.tail[i].prev_x = this.tail[i].x;
                     this.tail[i].prev_y = this.tail[i].y;
                     this.tail[i].x = this.tail[i - 1].prev_x;
@@ -92,6 +101,8 @@ function SnakeHead(){
         
     }
     
+    // Checks if the snake head is overlapping food and replaces with new food
+    // as well as increments score
     this.eat = function(food_list){
         if (food_list.length > 0){
             for (i = 0; i < food_list.length; i++){
@@ -108,7 +119,7 @@ function SnakeHead(){
     
 }
 
-
+// Snake body class that just keeps track of locations and can be drawn
 function SnakeBody(x, y){
     this.x = x;
     this.y = y;
@@ -139,17 +150,20 @@ function Food(){
 function draw() {
     background(0, 0, 0);
     fill(255,0,0);
+    
+    // Main Game Logic
     snake.eat(food_list)
     food_list[0].show();
-    
     snake.move(direction);
     fill(0, 255, 0);
     snake.show();
     
+    // Score counter
     textSize(score_size);
     fill(0, 102, 153);
     text(score, Canvas_x / 2 - score_size, score_y_offset);
     
+    // Song playing
     if( song.isPlaying() == false){
         song.play();
     }
