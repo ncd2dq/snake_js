@@ -1,29 +1,31 @@
-var Canvas_x, Canvas_y = 800;
-var Tiles = 50;
-var Tile_Dimension = Canvas_x / Tiles;
-var FPS = 15;
+let Canvas_x = 800;
+let Canvas_y = 800;
+let Tiles = 50;
+let Tile_Dimension = Canvas_x / Tiles;
+let FPS = 15;
+
+function setup() {    
+    createCanvas(Canvas_x, Canvas_y);
+    food = new Food();
+}
+
 
 function Food(){
-    this.x = random(Canvas_x);
-    this.y = random(Canvas_y);
+    this.x_offset = random(Tiles);
+    this.y_offset = random(Tiles);
+    this.x = this.x_offset * Tile_Dimension;
+    this.y = this.y_offset * Tile_Dimension;
     
     this.show = function(){
-        ellipse(this.x, this.y, Tile_Dimension, Tile_Dimension)
+        rect(this.x, this.y, Tile_Dimension, Tile_Dimension);
         
     }
     
 }
 
-
-
-
-
-function setup() {
-    createCanvas(Canvas_x, Canvas_y);
-    food = new Food()
-}
-
 function draw() {
-    background(255, 255, 255);
+    background(0, 0, 0);
+    
+    fill(255,0,0);
     food.show();
 }
