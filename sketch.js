@@ -1,10 +1,13 @@
-let Canvas_x = 800;
+let Canvas_x =800;
 let Canvas_y = 800;
 let Tiles = 50;
 let Tile_Dimension = Canvas_x / Tiles;
-let FPS = 15;
+let FPS = Canvas_x / 53;
 let snake_offset = 10;
 let direction = [1, 0];
+let score = 0;
+let score_size = 32;
+let score_y_offset = 50;
 
 function setup() {    
     createCanvas(Canvas_x, Canvas_y);
@@ -25,6 +28,7 @@ function SnakeHead(){
     this.tail = []
     
     this.show = function(){
+        color(0, 255, 0);
         rect(this.x, this.y, Tile_Dimension, Tile_Dimension);
         
         if (this.tail.length != 0){
@@ -40,6 +44,27 @@ function SnakeHead(){
         this.x += direction[0] * Tile_Dimension;
         this.y += direction[1] * Tile_Dimension;
         
+        // This checks if head collided with any of tail pieces
+        for (i = 0; i< this.tail.length; i++){
+            if (this.x == this.tail[i].x && this.y == this.tail[i].y){
+                this.tail = [];
+                alert("Your final score was " + score)
+                score = 0
+            }
+        }
+        
+        // This ensures that the snake wraps around the edges of the screen
+        if (this.x >= Canvas_x){
+            this.x = 0;
+        } else if (this.x < 0){
+            this.x = Canvas_x - Tile_Dimension;
+        } else if (this.y >= Canvas_y){
+            this.y = 0;
+        } else if (this.y < 0){
+            this.y = Canvas_y - Tile_Dimension;
+        }
+        
+        // this handles the trailing affect of the snake tail
         if (this.tail.length != 0){
             for (i = 0; i < this.tail.length; i++){
                 if (i == 0){
@@ -64,6 +89,7 @@ function SnakeHead(){
                 if (this.x == food_list[i].x && this.y == food_list[i].y){
                     this.tail.push(new SnakeBody(this.prev_x, this.prev_y));
                     food_list[i] = new Food();
+                    score += 1;
                     
                 }
             }
@@ -107,20 +133,25 @@ function draw() {
     snake.eat(food_list)
     food_list[0].show();
     
-    snake.move(direction);    
+    snake.move(direction);
+    fill(0, 255, 0);
     snake.show();
-
+    
+    textSize(score_size);
+    fill(0, 102, 153);
+    text(score, Canvas_x / 2 - score_size, score_y_offset);
+    console.log(score)
 }
 
 // User input
 function keyPressed(){
-    if (keyCode === LEFT_ARROW){
+    if (keyCode === LEFT_ARROW && direction[0] != 1){
         direction = [-1, 0];
-    } else if (keyCode === RIGHT_ARROW){
+    } else if (keyCode === RIGHT_ARROW && direction[0] != -1){
         direction = [1, 0];
-    } else if (keyCode === DOWN_ARROW){
+    } else if (keyCode === DOWN_ARROW && direction[1] != -1){
         direction = [0, 1];
-    } else if (keyCode === UP_ARROW){
+    } else if (keyCode === UP_ARROW && direction[1] != 1){
         direction = [0, -1];
     }
 }
