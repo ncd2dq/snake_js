@@ -10,11 +10,12 @@ let score_size = 32;
 let score_y_offset = 50;
 var song;
 
+/*
 function preload(){
     soundFormats('mp3');
     song = loadSound("assets/snake_music.mp3");
 } 
-
+*/
 
 function setup() {    
     createCanvas(Canvas_x, Canvas_y);
@@ -23,9 +24,11 @@ function setup() {
     food_list = [new Food()];
     snake = new SnakeHead();
     
+    /*
     if(song.isLoaded() == true){
         song.play();
     } 
+    */
 }
 
 
@@ -46,9 +49,11 @@ function draw() {
     text(score, Canvas_x / 2 - score_size, score_y_offset);
     
     // Song playing
+    /*
     if( song.isPlaying() == false){
         song.play();
     }
+    */
 }
 
 
@@ -56,11 +61,34 @@ function draw() {
 function keyPressed(){
     if (keyCode === LEFT_ARROW && direction[0] != 1){
         direction = [-1, 0];
+        
     } else if (keyCode === RIGHT_ARROW && direction[0] != -1){
         direction = [1, 0];
+        
     } else if (keyCode === DOWN_ARROW && direction[1] != -1){
         direction = [0, 1];
+        
     } else if (keyCode === UP_ARROW && direction[1] != 1){
         direction = [0, -1];
+    }
+}
+
+// Mousepressed works for mobile devices
+function mousePressed(){
+    // Move Down
+    if (mouseX < (Canvas_x *2  / 3) && mouseX > (Canvas_x / 3) && mouseY > (Canvas_y * 2 / 3) ){
+        direction = [0, 1];
+        
+    // Move Up
+    } else if (mouseX < (Canvas_x *2  / 3) && mouseX > (Canvas_x / 3) && mouseY < (Canvas_y / 3) ){
+        direction = [0, -1];
+        
+    // Move Left
+    } else if (mouseY < (Canvas_y *2  / 3) && mouseY > (Canvas_y / 3) && mouseX < (Canvas_x / 3) ){
+        direction = [-1, 0];
+        
+    // Move Right    
+    } else if (mouseY < (Canvas_y *2  / 3) && mouseY > (Canvas_y / 3) && mouseX > (Canvas_x * 2 / 3) ){
+        direction = [1, 0];
     }
 }
