@@ -1,2 +1,4 @@
 # snake_js
-simple snake game in javascript
+
+
+Simple snake game written in Javascript using the p5.Js environment
